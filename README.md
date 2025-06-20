@@ -52,3 +52,24 @@
 <div style="text-align: center; font-size: 16px;">
   
 </div>
+
+
+#### Дискриптивні статистики
+
+<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
+  <img src="graphs/дискриптивні статистики вага.png" alt="" style="width: 35%;">
+</div>
+<div style="text-align: center; font-size: 16px;">
+
+
+### 2. Довжина, ширина, висота товару
+
+<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
+  <img src="graphs/довжина.png" alt="Довжина" style="width: 33%;">
+  <img src="graphs/ширина.png" alt="Ширина" style="width: 33%;">
+  <img src="graphs/висота.png" alt="Висота" style="width: 33%;">
+</div>
+<div style="text-align: center; font-size: 16px;">
+  
+</div>
+

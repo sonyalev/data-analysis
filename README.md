@@ -3,19 +3,19 @@
 
 Дані були завантажені з наступних файлів:
 
-olist_order_items_dataset.csv (замовлення та їх складові)
+- olist_order_items_dataset.csv (замовлення та їх складові)
 
-olist_order_reviews_dataset.csv (відгуки клієнтів)
+- olist_order_reviews_dataset.csv (відгуки клієнтів)
 
-olist_orders_dataset.csv (загальна інформація про замовлення)
+- olist_orders_dataset.csv (загальна інформація про замовлення)
 
-olist_products_dataset.csv (деталі товарів)
+- olist_products_dataset.csv (деталі товарів)
 
-olist_sellers_dataset.csv (інформація про продавців)
+- olist_sellers_dataset.csv (інформація про продавців)
 
-olist_customers_dataset.csv (інформація про клієнтів)
+- olist_customers_dataset.csv (інформація про клієнтів)
 
-product_category_name_translation.csv (переклади категорій товарів)
+- product_category_name_translation.csv (переклади категорій товарів)
 
 Об’єднання даних здійснювалося через inner_join(), щоб уникнути неповних записів. Початковий набір даних містить 110750 колонок, 36 стовпчиків.
 

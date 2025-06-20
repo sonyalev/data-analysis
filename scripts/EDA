@@ -1,0 +1,251 @@
+# Кількість замовлень покупцями по штатах графік на слайді 14
+brazil_map <- st_read('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson')
+brazil_map <- st_make_valid(brazil_map)
+brazil_map <- st_transform(brazil_map, crs = 4326)
+brazil_map <- brazil_map[st_is_valid(brazil_map), ]
+
+# Дані про населення штатів Бразилії за 2017 рік
+population_data <- data.frame(
+  customer_state = c("SP", "MG", "RJ", "BA", "RS", "PR", "PE", "CE", "PA", "SC", "MA", "GO", "AM", "PB", "ES", "RN", "AL", "MT", "PI", "DF", "MS", "SE", "RO", "TO", "AC", "AP", "RR"),
+  population = c(45094866, 21119536, 16718956, 15344447, 11322895, 11320892, 9473266, 9020460, 8366628, 7001161, 7000229, 6778772, 4063614, 4025558, 4016356, 3507003, 3375823, 3344544, 3219257, 3039444, 2713147, 2288116, 1805788, 1550194, 829619, 797722, 522636)
+)
+
+# Обчислення відносної кількості замовлень
+df_relative_orders <- df_clean %>%
+  group_by(customer_state) %>%
+  summarise(order_count = n_distinct(order_id)) %>%
+  left_join(population_data, by = "customer_state") %>%
+  mutate(orders_per_100k = (order_count / population) * 100000)
+
+brazil_map <- brazil_map %>%
+  left_join(df_relative_orders, by = c("sigla" = "customer_state"))
+
+brazil_map$centroid <- st_point_on_surface(brazil_map$geometry)
+pal <- colorNumeric(palette = "Purples", domain = brazil_map$orders_per_100k)
+
+customer <- leaflet(data = brazil_map) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~pal(orders_per_100k),
+    color = "black",
+    weight = 1,
+    opacity = 0.7,
+    fillOpacity = 0.7,
+    popup = ~paste("Штат:", name, "<br>",
+                   "Кількість замовлень:", order_count, "<br>",
+                   "Населення:", format(population, big.mark = " "), "<br>",
+                   "Замовлень на 100 тис. осіб:", round(orders_per_100k, 2)),
+    highlight = highlightOptions(weight = 2, color = "white", fillOpacity = 0.7)
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = pal,
+    values = brazil_map$orders_per_100k,
+    title = "Замовлення на 100 000 осіб"
+  ) %>%
+  addLabelOnlyMarkers(
+    data = brazil_map,
+    lng = ~st_coordinates(centroid)[,1],
+    lat = ~st_coordinates(centroid)[,2],
+    label = ~sigla,
+    labelOptions = labelOptions(
+      noHide = TRUE,
+      direction = "center",
+      textOnly = TRUE,
+      style = list(
+        "color" = "black",
+        "font-weight" = "bold",
+        "font-size" = "14px"
+      )
+    )
+  )
+
+saveWidget(customer, "brazil_orders_customer.html", selfcontained = TRUE)
+customer
+
+
+
+#Посилання на інформацію про населення
+# Кількість замовлень, що відбулися з різних штатів продавців слайд 15
+df_relative_orders <- df_clean %>%
+  group_by(seller_state) %>%  # Заміна customer_state на seller_state
+  summarise(order_count = n_distinct(order_id)) %>%
+  right_join(population_data, by = c("seller_state" = "customer_state")) %>%  # Заміна customer_state на seller_state
+  mutate(order_count = replace_na(order_count, 0),  # Заповнення NA значень нулями
+         orders_per_100k = (order_count / population) * 100000)
+
+brazil_map <- brazil_map %>%
+  left_join(df_relative_orders, by = c("sigla" = "seller_state"))
+
+brazil_map$centroid <- st_point_on_surface(brazil_map$geometry)
+pal <- colorNumeric(palette = "RdPu", domain = brazil_map$orders_per_100k)
+
+seller <- leaflet(data = brazil_map) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~pal(orders_per_100k),
+    color = "black",
+    weight = 1,
+    opacity = 0.7,
+    fillOpacity = 0.7,
+    popup = ~paste("Штат:", name, "<br>",
+                   "Кількість замовлень:", order_count, "<br>",
+                   "Населення:", format(population, big.mark = " "), "<br>",
+                   "Замовлень на 100 тис. осіб:", round(orders_per_100k, 2)),
+    highlight = highlightOptions(weight = 2, color = "white", fillOpacity = 0.7)
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = pal,
+    values = brazil_map$orders_per_100k,
+    title = "Замовлення на 100 000 осіб"
+  ) %>%
+  addLabelOnlyMarkers(
+    data = brazil_map,
+    lng = ~st_coordinates(centroid)[,1],
+    lat = ~st_coordinates(centroid)[,2],
+    label = ~sigla,
+    labelOptions = labelOptions(
+      noHide = TRUE,
+      direction = "center",
+      textOnly = TRUE,
+      style = list(
+        "color" = "black",
+        "font-weight" = "bold",
+        "font-size" = "14px"
+      )
+    )
+  )
+
+saveWidget(seller, "brazil_orders_seller.html", selfcontained = TRUE)
+seller
+
+# Медіана часу доставки по штатах
+df_clean$delivery_duration <- as.numeric(difftime(df_clean$order_delivered_customer_date,df_clean$order_purchase_timestamp, units = "days"))
+
+
+state_delivery <- df_clean %>%
+  group_by(customer_state) %>%
+  summarise(median_delivery = median(delivery_duration, na.rm = TRUE))
+
+brazil_map <- brazil_map %>%
+  left_join(state_delivery, by = c("sigla" = "customer_state"))
+
+brazil_map$centroid <- st_point_on_surface(brazil_map$geometry)
+pal <- colorNumeric(palette = "Reds", domain = brazil_map$median_delivery)
+
+delivery <- leaflet(data = brazil_map) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~pal(median_delivery),
+    color = "black",
+    weight = 1,
+    opacity = 0.7,
+    fillOpacity = 0.7,
+    popup = ~paste("Штат:", name, "<br>", "Медіана часу доставки:", round(median_delivery, 2), "днів"),
+    highlight = highlightOptions(weight = 2, color = "white", fillOpacity = 0.7)
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = pal,
+    values = brazil_map$median_delivery,
+    title = "Медіана часу доставки (дні)"
+  )
+
+delivery <- delivery %>%
+  addLabelOnlyMarkers(
+    data = brazil_map,
+    lng = ~st_coordinates(centroid)[,1],
+    lat = ~st_coordinates(centroid)[,2],
+    label = ~sigla,  # Двобуквений код штату
+    labelOptions = labelOptions(
+      noHide = TRUE,
+      direction = "center",
+      textOnly = TRUE,
+      style = list(
+        "color" = "black",
+        "font-weight" = "bold",
+        "font-size" = "14px"
+      )
+    )
+  )
+
+saveWidget(delivery, "brazil_median_delivery.html", selfcontained = TRUE)
+delivery
+
+# Медіана вартості доставки по штатах
+state_freight_value <- df_clean %>%
+  group_by(customer_state) %>%
+  summarise(median_freight_value = median(freight_value, na.rm = TRUE))
+
+brazil_map <- brazil_map %>%
+  left_join(state_freight_value, by = c("sigla" = "customer_state"))
+
+pal <- colorNumeric(palette = "Greens", domain = brazil_map$median_freight_value)
+
+freight_value_map <- leaflet(data = brazil_map) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~pal(median_freight_value),
+    color = "black",
+    weight = 1,
+    opacity = 0.7,
+    fillOpacity = 0.7,
+    popup = ~paste("Штат:", name, "<br>", "Медіана вартості доставки:", round(median_freight_value, 2), "USD"),
+    highlight = highlightOptions(weight = 2, color = "white", fillOpacity = 0.7)
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = pal,
+    values = brazil_map$median_freight_value,
+    title = "Медіана вартості доставки (USD)"
+  )
+
+freight_value_map <- freight_value_map %>%
+  addLabelOnlyMarkers(
+    data = brazil_map,
+    lng = ~st_coordinates(centroid)[,1],
+    lat = ~st_coordinates(centroid)[,2],
+    label = ~sigla,  # Двобуквений код штату
+    labelOptions = labelOptions(
+      noHide = TRUE,
+      direction = "center",
+      textOnly = TRUE,
+      style = list(
+        "color" = "black",
+        "font-weight" = "bold",
+        "font-size" = "14px"
+      )
+    )
+  )
+
+saveWidget(freight_value_map, "brazil_median_freight_value.html", selfcontained = TRUE)
+freight_value_map
+# Медіана вартості замовлення по штатах
+df_orders_customers <- df_orders %>%
+  inner_join(df_customers, by = "customer_id")
+
+df_order_items_customers <- df_items %>%
+  inner_join(df_orders_customers, by = "order_id")
+
+median_price_per_state <- df_order_items_customers %>%
+  group_by(customer_state) %>%
+  summarise(median_price = median(price, na.rm = TRUE)) %>%
+  arrange(desc(median_price))
+
+ggplot(median_price_per_state, aes(x = reorder(customer_state, median_price), y = median_price, fill = median_price)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_fill_gradient(low = "#7395AE", high = "#B5EAD7") +
+  labs(
+    x = "Штат",
+    y = "Медіанна вартість замовлення (BRL)"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
+    legend.title = element_text(size = 15),
+    legend.text = element_text(size = 10)
+  )

@@ -34,12 +34,20 @@
   
 </div>
 
+#### Дискриптивні статистики
+
+<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
+  <img src="graphs/дискриптивні статистики ціни.png" alt="" style="width: 45%;">
+</div>
+<div style="text-align: center; font-size: 16px;">
+  
+</div>
 
 ### 2. Вага товару
 
 <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
-  <img src="graphs/ціна.png" alt="Ціна товару" style="width: 45%;">
-  <img src="graphs/лог_ціни.png" alt="Лог ціни товару" style="width: 45%;">
+  <img src="graphs/вага.png" alt="Вага товару" style="width: 45%;">
+  <img src="graphs/лог ваги.png" alt="Лог ваги товару" style="width: 45%;">
 </div>
 <div style="text-align: center; font-size: 16px;">
   

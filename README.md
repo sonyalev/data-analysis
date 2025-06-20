@@ -37,7 +37,7 @@
 #### Дискриптивні статистики
 
 <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
-  <img src="graphs/дискриптивні статистики ціни.png" alt="" style="width: 45%;">
+  <img src="graphs/дискриптивні статистики ціни.png" alt="" style="width: 35%;">
 </div>
 <div style="text-align: center; font-size: 16px;">
   
@@ -47,7 +47,7 @@
 
 <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
   <img src="graphs/вага.png" alt="Вага товару" style="width: 45%;">
-  <img src="graphs/лог ваги.png" alt="Лог ваги товару" style="width: 45%;">
+  <img src="graphs/лог ваги.png" alt="Лог ваги товару" style="width: 43%;">
 </div>
 <div style="text-align: center; font-size: 16px;">
   

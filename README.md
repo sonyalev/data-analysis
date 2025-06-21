@@ -115,6 +115,6 @@
 
 ## 3. Медіана часу доставки
 <a href="https://sonyalev.github.io/data-analysis/map_graph/median_delivery.html" target="_blank">
-  <img src="https://github.com/sonyalev/data-analysis/map_graph/median_delivery.png" alt="Переглянути графік" width="500">
+<img src="map_graph/median_delivery.png" alt="Переглянути графік" width="500">
 </a>
 

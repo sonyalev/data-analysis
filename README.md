@@ -147,5 +147,5 @@
 
 ## 6. Кількість замовлень по місяцях 
 <a href="https://sonyalev.github.io/data-analysis/graphs/кількість замовлень по місяцях.html" target="_blank">
-<img src="graphs/кількість замовлень по місяцях.png" alt="Переглянути графік" width="1000">
+<img src="graphs/кількість замовлень по місяцях.png" alt="Переглянути графік" width="600">
 </a>

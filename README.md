@@ -136,3 +136,10 @@
 <img src="map_graph/median_freight_value.png" alt="Переглянути графік" width="500">
 </a>
 
+
+
+
+## 5. Час та вартість доставки залежно від штату покупця
+<a href="https://sonyalev.github.io/data-analysis/graphs/час та вартість залежно від штату покупця.html" target="_blank">
+<img src="graphs/час та вартість залежно від штату покупця.png" alt="Переглянути графік" width="1000">
+</a>

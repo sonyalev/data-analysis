@@ -111,10 +111,25 @@
 
 # EDA
 
-## Кількість замовлень зроблених покупцями з різних штатів
+## 1. Кількість замовлень зроблених покупцями з різних штатів
+<a href="https://sonyalev.github.io/data-analysis/map_graph/customer.html" target="_blank">
+<img src="map_graph/customer.png" alt="Переглянути графік" width="500">
+</a>
+
+## 2. Кількість замовлень, що відбулися з різних штатів продавців
+<a href="https://sonyalev.github.io/data-analysis/map_graph/seller.html" target="_blank">
+<img src="map_graph/seller.png" alt="Переглянути графік" width="500">
+</a>
+
 
 ## 3. Медіана часу доставки
 <a href="https://sonyalev.github.io/data-analysis/map_graph/median_delivery.html" target="_blank">
 <img src="map_graph/median_delivery.png" alt="Переглянути графік" width="500">
+</a>
+
+
+## 4. Медіана вартості доставки замовлень
+<a href="https://sonyalev.github.io/data-analysis/map_graph/median_freight_value.html" target="_blank">
+<img src="map_graph/median_freight_value.png" alt="Переглянути графік" width="500">
 </a>
 

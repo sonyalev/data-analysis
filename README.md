@@ -27,8 +27,8 @@
 ### 1. Ціна товару
 
 <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
-  <img src="graphs/ціна.png" alt="Ціна товару" style="width: 45%;">
-  <img src="graphs/лог_ціни.png" alt="Лог ціни товару" style="width: 45%;">
+  <img src="graphs/ціна.png" alt="Ціна товару" style="width: 44%;">
+  <img src="graphs/лог_ціни.png" alt="Лог ціни товару" style="width: 44%;">
 </div>
 <div style="text-align: center; font-size: 16px;">
   
@@ -86,5 +86,21 @@
 
 <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
   <img src="graphs/дискриптивні статистики вартості доставки.png" alt="" style="width: 35%;">
+</div>
+<div style="text-align: center; font-size: 16px;">
+
+
+### 5. Оцінка
+
+<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
+  <img src="graphs/оцінка.png" alt="" style="width: 35%;">
+</div>
+<div style="text-align: center; font-size: 16px;">
+
+
+### 6. Довжина назви, опису, кількість фото
+
+<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
+  <img src="graphs/довжина назви, опису, кількість фото.png" alt="" style="width: 100%;">
 </div>
 <div style="text-align: center; font-size: 16px;">

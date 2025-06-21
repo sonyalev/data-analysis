@@ -104,3 +104,17 @@
   <img src="graphs/довжина назви, опису, кількість фото.png" alt="" style="width: 100%;">
 </div>
 <div style="text-align: center; font-size: 16px;">
+
+
+
+
+
+# EDA
+
+## Кількість замовлень зроблених покупцями з різних штатів
+
+## 3. Медіана часу доставки
+<a href="https://sonyalev.github.io/data-analysis/map_graph/median_delivery.html" target="_blank">
+  <img src="https://github.com/sonyalev/data-analysis/map_graph/median_delivery.png" alt="Переглянути графік" width="500">
+</a>
+

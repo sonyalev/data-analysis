@@ -1,4 +1,4 @@
-# Кількість замовлень покупцями по штатах графік на слайді 14
+# Кількість замовлень покупцями по штатах 
 brazil_map <- st_read('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson')
 brazil_map <- st_make_valid(brazil_map)
 brazil_map <- st_transform(brazil_map, crs = 4326)
@@ -65,8 +65,7 @@ customer
 
 
 
-#Посилання на інформацію про населення
-# Кількість замовлень, що відбулися з різних штатів продавців слайд 15
+# Кількість замовлень, що відбулися з різних штатів продавців 
 df_relative_orders <- df_clean %>%
   group_by(seller_state) %>%  # Заміна customer_state на seller_state
   summarise(order_count = n_distinct(order_id)) %>%

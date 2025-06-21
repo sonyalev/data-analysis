@@ -37,7 +37,7 @@
 #### Дискриптивні статистики
 
 <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
-  <img src="graphs/дискриптивні статистики ціни.png" alt="" style="width: 35%;">
+  <img src="graphs/дискриптивні статистики ціни.png" alt="" style="width: 28%;">
 </div>
 <div style="text-align: center; font-size: 16px;">
   
@@ -57,7 +57,7 @@
 #### Дискриптивні статистики
 
 <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
-  <img src="graphs/дискриптивні статистики вага.png" alt="" style="width: 35%;">
+  <img src="graphs/дискриптивні статистики вага.png" alt="" style="width: 28%;">
 </div>
 <div style="text-align: center; font-size: 16px;">
 
@@ -85,7 +85,7 @@
 #### Дискриптивні статистики
 
 <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
-  <img src="graphs/дискриптивні статистики вартості доставки.png" alt="" style="width: 35%;">
+  <img src="graphs/дискриптивні статистики вартості доставки.png" alt="" style="width: 28%;">
 </div>
 <div style="text-align: center; font-size: 16px;">
 

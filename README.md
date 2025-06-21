@@ -143,3 +143,9 @@
 <a href="https://sonyalev.github.io/data-analysis/graphs/час та вартість залежно від штату покупця.html" target="_blank">
 <img src="graphs/час та вартість залежно від штату покупця.png" alt="Переглянути графік" width="1000">
 </a>
+
+
+## 6. Кількість замовлень по місяцях 
+<a href="https://sonyalev.github.io/data-analysis/graphs/кількість замовлень по місяцях.html" target="_blank">
+<img src="graphs/кількість замовлень по місяцях.png" alt="Переглянути графік" width="1000">
+</a>

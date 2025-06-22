@@ -488,6 +488,24 @@ ggplot(low_review_rate, aes(x = review_month, y = negative_rate, group = 1)) +
   )
 
 
+
+# 10. Топ 15 категорій товарів з найбільшою кількістю негативних оцінок
+df_clean %>%
+  filter(review_score < 3) %>%
+  group_by(product_category_name) %>%
+  summarise(negative_reviews = n()) %>%
+  arrange(desc(negative_reviews)) %>%
+  slice_head(n = 15) %>%
+  ggplot(aes(x = reorder(product_category_name, negative_reviews), y = negative_reviews, fill = negative_reviews)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_fill_gradient(low = "mistyrose", high = "darkred", guide = 'none') +
+  labs(title = "Топ-15 категорій товарів з найбільшою к-стю негативних оцінок",
+       x = "Категорія товарів",
+       y = "Кількість поганих оцінок") +
+  theme_minimal()
+
+
 # 11. Як змінюються оцінки залежно від затримки доставки
 df_orders <- df_orders %>%
   mutate(delay = as.numeric(as.Date(order_delivered_customer_date) - as.Date(order_estimated_delivery_date)))

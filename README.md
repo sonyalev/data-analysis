@@ -140,23 +140,23 @@
 
 
 ## 5. Час та вартість доставки залежно від штату покупця
-<a href="https://sonyalev.github.io/data-analysis/graphs/час та вартість залежно від штату покупця.html" target="_blank">
 <img src="graphs/час та вартість залежно від штату покупця.png" alt="Переглянути графік" width="1000">
 </a>
 
 
 ## 6. Кількість замовлень по місяцях 
-<a href="https://sonyalev.github.io/data-analysis/graphs/кількість замовлень по місяцях.html" target="_blank">
 <img src="graphs/кількість замовлень по місяцях.png" alt="Переглянути графік" width="600">
 </a>
 
 
-## 7. Медіана вартості &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| &nbsp; &nbsp;   днів доставки по місяцях 
-<a href="https://sonyalev.github.io/data-analysis/graphs/медіана вартості дні доставки.html" target="_blank">
+## 7. Медіана вартості замовлень &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| &nbsp; &nbsp;   днів доставки по місяцях 
 <img src="graphs/медіана вартості дні доставки.png" alt="Переглянути графік" width="1000">
 </a>
 
 
-## 8. Медіана днів доставки замовлень по місяцях
+## 8. Динаміка зростання нових клієнтів і продавців
+<img src="graphs/динаміка зростання нових клієнтів і продавців.png" alt="Переглянути графік" width="1000">
+</a>
+
 
 

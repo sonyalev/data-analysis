@@ -248,3 +248,58 @@ ggplot(median_price_per_state, aes(x = reorder(customer_state, median_price), y 
     legend.title = element_text(size = 15),
     legend.text = element_text(size = 10)
   )
+
+
+
+
+
+# Час доставки, штат покупця
+ggplot(df_clean, aes(x = customer_state, y = log(actual_delivery_time))) +
+  geom_boxplot() +
+  labs(x = "Штат покупця", y = "ln(Фактичний час доставки у днях)") +
+  theme_minimal() +
+  theme(text = element_text(size = 15))
+
+
+# Вартість доставки, штат покупця
+ggplot(df_clean, aes(x = customer_state, y = log1p(freight_value))) +
+  geom_boxplot() +
+  labs(x = "Штат покупця", y = "ln(Вартість доставки)") +
+  theme_minimal() +
+  theme(text = element_text(size = 15))
+
+
+
+# Кількість замовлень по місяцях
+df$order_purchase_timestamp <- as.POSIXct(df$order_purchase_timestamp)
+
+df <- df %>%
+  mutate(order_month = as.Date(floor_date(order_purchase_timestamp, unit = "month")))
+
+all_months <- data.frame(order_month = seq(as.Date("2016-10-01"), as.Date("2018-08-01"), by = "month"))
+
+monthly_orders <- df %>%
+  group_by(order_month) %>%
+  summarise(order_count = n(), .groups = "drop") %>%
+  right_join(all_months, by = "order_month") %>%
+  mutate(order_count = ifelse(is.na(order_count), 0, order_count))
+
+ggplot(data = monthly_orders, aes(x = order_month, y = order_count)) +
+  geom_line(color = "purple", size = 1.5) +
+  geom_point(color = "purple", size = 3) +
+  scale_x_date(
+    date_labels = "%Y-%m",
+    date_breaks = "1 month",
+    expand = c(0, 0)
+  ) +
+  labs(
+    x = "Дата (Рік-місяць)",
+    y = "Кількість замовлень"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    axis.text.y = element_text(size = 10),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15)
+  )

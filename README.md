@@ -149,3 +149,14 @@
 <a href="https://sonyalev.github.io/data-analysis/graphs/кількість замовлень по місяцях.html" target="_blank">
 <img src="graphs/кількість замовлень по місяцях.png" alt="Переглянути графік" width="600">
 </a>
+
+
+## 7. Медіана вартості &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| &nbsp; &nbsp;   днів доставки по місяцях 
+<a href="https://sonyalev.github.io/data-analysis/graphs/медіана вартості дні доставки.html" target="_blank">
+<img src="graphs/медіана вартості дні доставки.png" alt="Переглянути графік" width="1000">
+</a>
+
+
+## 8. Медіана днів доставки замовлень по місяцях
+
+

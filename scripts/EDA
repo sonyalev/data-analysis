@@ -379,3 +379,78 @@ ggplot(monthly_median_delivery, aes(x = order_month, y = median_delivery)) +
     axis.title.x = element_text(size = 15),
     axis.title.y = element_text(size = 15)
   )
+
+
+
+
+
+
+
+
+# Як змінювалась кількість нових покупців з часом
+first_order <- df_orders %>%
+  group_by(customer_id) %>%
+  summarise(first_order_date = min(ymd_hms(order_purchase_timestamp))) %>%
+  mutate(first_order_month = as.Date(floor_date(first_order_date, "month")))
+
+new_customers_per_month <- first_order %>%
+  count(first_order_month) %>%
+  filter(first_order_month >= as.Date("2016-10-01") & first_order_month <= as.Date("2018-08-01")) %>%
+  arrange(first_order_month)
+
+ggplot(new_customers_per_month, aes(x = first_order_month, y = n)) +
+  geom_line(color = "#6A0DAD", size = 1.5) +
+  geom_point(color = "#6A0DAD", size = 3) +
+  scale_x_date(
+    date_labels = "%Y-%m",
+    date_breaks = "1 month",
+    limits = c(as.Date("2016-10-01"), as.Date("2018-08-01")),
+    expand = c(0, 0)
+  ) +
+  labs(
+    x = "Дата (Рік-місяць)",
+    y = "Кількість нових клієнтів"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    axis.text.y = element_text(size = 10),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15)
+  )
+# Як змінювалась кількість нових продавців з часом
+df_sellers_orders <- df_items %>%
+  inner_join(df_orders, by = "order_id")
+
+df_sellers_orders <- df_sellers_orders %>%
+  mutate(order_month = as.Date(floor_date(ymd_hms(order_purchase_timestamp), "month")))
+
+sellers_per_month <- df_sellers_orders %>%
+  group_by(order_month) %>%
+  summarise(unique_sellers = n_distinct(seller_id)) %>%
+  ungroup() %>%
+  filter(order_month >= as.Date("2016-10-01") & order_month <= as.Date("2018-08-01")) %>%
+  arrange(order_month)
+
+ggplot(sellers_per_month, aes(x = order_month, y = unique_sellers)) +
+  geom_line(color = "#007ACC", size = 1.5) +
+  geom_point(color = "#007ACC", size = 3) +
+  scale_y_continuous(breaks = seq(0, max(sellers_per_month$unique_sellers), by = 250)) +
+  scale_x_date(
+    date_labels = "%Y-%m",
+    date_breaks = "1 month",
+    limits = c(as.Date("2016-10-01"), as.Date("2018-08-01")),
+    expand = c(0, 0)
+  ) +
+  labs(
+    x = "Дата (Рік-місяць)",
+    y = "Кількість нових продавців"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    axis.text.y = element_text(size = 10),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15)
+  )
+

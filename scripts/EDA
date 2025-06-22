@@ -1,4 +1,4 @@
-# Кількість замовлень покупцями по штатах 
+# 1. Кількість замовлень покупцями по штатах 
 brazil_map <- st_read('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson')
 brazil_map <- st_make_valid(brazil_map)
 brazil_map <- st_transform(brazil_map, crs = 4326)
@@ -65,7 +65,7 @@ customer
 
 
 
-# Кількість замовлень, що відбулися з різних штатів продавців 
+# 2. Кількість замовлень, що відбулися з різних штатів продавців 
 df_relative_orders <- df_clean %>%
   group_by(seller_state) %>%  # Заміна customer_state на seller_state
   summarise(order_count = n_distinct(order_id)) %>%
@@ -119,7 +119,7 @@ seller <- leaflet(data = brazil_map) %>%
 saveWidget(seller, "brazil_orders_seller.html", selfcontained = TRUE)
 seller
 
-# Медіана часу доставки по штатах
+# 3. Медіана часу доставки по штатах
 df_clean$delivery_duration <- as.numeric(difftime(df_clean$order_delivered_customer_date,df_clean$order_purchase_timestamp, units = "days"))
 
 
@@ -172,7 +172,7 @@ delivery <- delivery %>%
 saveWidget(delivery, "brazil_median_delivery.html", selfcontained = TRUE)
 delivery
 
-# Медіана вартості доставки по штатах
+# 4. Медіана вартості доставки по штатах
 state_freight_value <- df_clean %>%
   group_by(customer_state) %>%
   summarise(median_freight_value = median(freight_value, na.rm = TRUE))
@@ -253,7 +253,7 @@ ggplot(median_price_per_state, aes(x = reorder(customer_state, median_price), y 
 
 
 
-# Час доставки, штат покупця
+# 5. Час доставки, штат покупця
 ggplot(df_clean, aes(x = customer_state, y = log(actual_delivery_time))) +
   geom_boxplot() +
   labs(x = "Штат покупця", y = "ln(Фактичний час доставки у днях)") +
@@ -261,7 +261,7 @@ ggplot(df_clean, aes(x = customer_state, y = log(actual_delivery_time))) +
   theme(text = element_text(size = 15))
 
 
-# Вартість доставки, штат покупця
+# 5. Вартість доставки, штат покупця
 ggplot(df_clean, aes(x = customer_state, y = log1p(freight_value))) +
   geom_boxplot() +
   labs(x = "Штат покупця", y = "ln(Вартість доставки)") +
@@ -270,7 +270,7 @@ ggplot(df_clean, aes(x = customer_state, y = log1p(freight_value))) +
 
 
 
-# Кількість замовлень по місяцях
+# 6. Кількість замовлень по місяцях
 df$order_purchase_timestamp <- as.POSIXct(df$order_purchase_timestamp)
 
 df <- df %>%
@@ -308,7 +308,7 @@ ggplot(data = monthly_orders, aes(x = order_month, y = order_count)) +
 
 
 
-# Медіана вартості доставки замовлень по місяцях
+# 7. Медіана вартості доставки замовлень по місяцях
 merged <- inner_join(df_items, df_orders, by = "order_id")
 
 merged$order_purchase_timestamp <- as.Date(merged$order_purchase_timestamp)
@@ -341,7 +341,7 @@ ggplot(median_freight_by_month, aes(x = month, y = median_freight)) +
         axis.title.x = element_text(size = 15),
         axis.title.y = element_text(size = 15))
 
-# Медіана днів доставки замовлень по місяцях
+# 7. Медіана днів доставки замовлень по місяцях
 df$order_purchase_timestamp <- as.POSIXct(df$order_purchase_timestamp)
 df$order_delivered_customer_date <- as.POSIXct(df$order_delivered_customer_date)
 
@@ -387,7 +387,7 @@ ggplot(monthly_median_delivery, aes(x = order_month, y = median_delivery)) +
 
 
 
-# Як змінювалась кількість нових покупців з часом
+# 8. Як змінювалась кількість нових покупців з часом
 first_order <- df_orders %>%
   group_by(customer_id) %>%
   summarise(first_order_date = min(ymd_hms(order_purchase_timestamp))) %>%
@@ -418,7 +418,7 @@ ggplot(new_customers_per_month, aes(x = first_order_month, y = n)) +
     axis.title.x = element_text(size = 15),
     axis.title.y = element_text(size = 15)
   )
-# Як змінювалась кількість нових продавців з часом
+# 8. Як змінювалась кількість нових продавців з часом
 df_sellers_orders <- df_items %>%
   inner_join(df_orders, by = "order_id")
 
@@ -454,3 +454,93 @@ ggplot(sellers_per_month, aes(x = order_month, y = unique_sellers)) +
     axis.title.y = element_text(size = 15)
   )
 
+# 9. Як змінювався відсоток негативних відгуків з часом
+df_reviews <- df_reviews %>%
+  mutate(review_month = format(ymd(review_creation_date), "%Y-%m"))
+
+low_reviews <- df_reviews %>%
+  filter(review_score <= 2) %>%
+  group_by(review_month) %>%
+  summarise(low_count = n())
+
+total_reviews <- df_reviews %>%
+  group_by(review_month) %>%
+  summarise(total_count = n())
+
+low_review_rate <- left_join(low_reviews, total_reviews, by = "review_month") %>%
+  mutate(negative_rate = (low_count / total_count) * 100) %>%
+  filter(!is.na(review_month) & review_month != "NA")
+ggplot(low_review_rate, aes(x = review_month, y = negative_rate, group = 1)) +
+  geom_line(color = "gray50", size = 1) +
+  geom_point(color = "gray50", size = 3) +
+  scale_y_continuous(breaks = seq(0, max(low_review_rate$negative_rate, na.rm = TRUE), by = 5)) +  # Поділки Y з кроком 5%
+  scale_x_discrete(drop = TRUE) +
+  labs(
+    x = "Дата (Рік-місяць)",
+    y = "Відсоток негативних відгуків (%)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    axis.text.y = element_text(size = 10),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
+  )
+
+
+# 11. Як змінюються оцінки залежно від затримки доставки
+df_orders <- df_orders %>%
+  mutate(delay = as.numeric(as.Date(order_delivered_customer_date) - as.Date(order_estimated_delivery_date)))
+
+df_orders_reviews <- df_orders %>%
+  inner_join(df_reviews, by = "order_id")
+
+pastel_colors <- c("#AFCBFF", "#C9E4DE", "#E2C2B9", "#F2D388", "#D4A5A5")
+
+ggplot(df_orders_reviews, aes(x = as.factor(review_score), y = delay, fill = as.factor(review_score))) +
+  geom_boxplot() +
+  scale_fill_manual(values = pastel_colors) +
+  labs(
+    x = "Оцінка",
+    y = "Затримка доставки (дні)",
+  ) +
+  ylim(-20, 50) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.title.x = element_text(size = 15),  # Розмір підпису осі X
+    axis.title.y = element_text(size = 15),  # Розмір підпису осі Y
+    axis.text.x = element_text(size = 15),
+    axis.text.y = element_text(size = 15),
+  )
+
+
+# 12. Ціна доставки, ціна товару, вага
+ggplot(df_clean, aes(x = log(price), y = log1p(freight_value), colour = log(product_weight_g))) +
+  geom_point(alpha = 0.3) +
+  scale_color_gradient(low = "yellow", high = "red") +
+  labs(x = "ln(Ціна, R$)", y = "ln(Вартість доставки, R$)", color = "ln(Вага, г)") +
+  theme(text = element_text(size = 15))
+
+
+# 13. Ціна доставки, ціна товару, відстань
+ggplot(df_clean, aes(x = log(price), y = log1p(freight_value), colour = distance_km)) +
+  geom_point(alpha = 0.3) +
+  scale_color_gradient(low = "lightblue", high = "darkblue") +
+  labs(x = "ln(Ціна, R$)", y = "ln(Вартість доставки, R$)", color = "(Відстань, км)") +
+  theme(text = element_text(size = 15))
+
+
+# 14. Кореляція
+ggcorr(df_clean %>%
+         mutate(review_score = as.numeric(as.character(review_score))) %>%  # Перетворюємо фактор
+         select(price, freight_value, review_score,
+                product_name_lenght, product_description_lenght, product_photos_qty,
+                product_weight_g, product_length_cm, product_height_cm,
+                product_width_cm, actual_delivery_time, distance_km),
+       method = c("pairwise", "spearman"),  # Використовуємо кореляцію Спірмена
+       label = TRUE,                        # Додаємо числові значення кореляції
+       label_size = 4,                       # Розмір шрифту міток
+       hjust = 0.9,                          # Розташування міток
+       layout.exp = 2) +                     # Оптимізація розміщення
+  ggtitle("Кореляційна матриця")

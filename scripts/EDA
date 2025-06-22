@@ -303,3 +303,79 @@ ggplot(data = monthly_orders, aes(x = order_month, y = order_count)) +
     axis.title.x = element_text(size = 15),
     axis.title.y = element_text(size = 15)
   )
+
+
+
+
+
+# Медіана вартості доставки замовлень по місяцях
+merged <- inner_join(df_items, df_orders, by = "order_id")
+
+merged$order_purchase_timestamp <- as.Date(merged$order_purchase_timestamp)
+
+merged <- merged %>%
+  mutate(month = floor_date(order_purchase_timestamp, unit = "month"))
+
+median_freight_by_month <- merged %>%
+  group_by(month) %>%
+  summarise(median_freight = median(freight_value, na.rm = TRUE)) %>%
+  ungroup()
+
+median_freight_by_month <- median_freight_by_month %>%
+  filter(month >= as.Date("2016-10-01") & month <= as.Date("2018-08-01"))
+
+ggplot(median_freight_by_month, aes(x = month, y = median_freight)) +
+  geom_line(color = "red", size = 1.5) +
+  geom_point(color = "red", size = 3) +
+  labs(x = "Місяць",
+       y = "Медіанна вартість доставки (BRL)") +
+  scale_x_date(
+    date_labels = "%Y-%m",
+    date_breaks = "1 month",
+    limits = c(as.Date("2016-10-01"), as.Date("2018-08-01")),
+    expand = c(0, 0)
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15))
+
+# Медіана днів доставки замовлень по місяцях
+df$order_purchase_timestamp <- as.POSIXct(df$order_purchase_timestamp)
+df$order_delivered_customer_date <- as.POSIXct(df$order_delivered_customer_date)
+
+df <- df %>%
+  mutate(
+    delivery_duration = as.numeric(difftime(order_delivered_customer_date, order_purchase_timestamp, units = "days")),
+    order_month = as.Date(floor_date(order_purchase_timestamp, unit = "month"))
+  )
+
+all_months <- data.frame(order_month = seq(as.Date("2016-10-01"), as.Date("2018-08-01"), by = "month"))
+
+monthly_median_delivery <- df %>%
+  group_by(order_month) %>%
+  summarise(median_delivery = median(delivery_duration, na.rm = TRUE), .groups = "drop") %>%
+  right_join(all_months, by = "order_month") %>%
+  mutate(median_delivery = ifelse(is.na(median_delivery), 0, median_delivery))
+
+ggplot(monthly_median_delivery, aes(x = order_month, y = median_delivery)) +
+  geom_line(color = "blue", size = 1.5) +
+  geom_point(color = "blue", size = 3) +
+  scale_x_date(
+    date_labels = "%Y-%m",
+    date_breaks = "1 month",
+    limits = c(as.Date("2016-10-01"), as.Date("2018-08-01")),
+    expand = c(0, 0)
+  ) +
+  labs(
+    x = "Дата (Рік-місяць)",
+    y = "Медіанна доставка (дні)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    axis.text.y = element_text(size = 10),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15)
+  )
